@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slope Checker (Clause 54 & NCC)</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 50px; }
+        input { padding: 5px; margin: 5px; }
+        button { padding: 5px 15px; }
+        .result { margin-top: 20px; font-weight: bold; }
+        .pass { color: green; }
+        .fail { color: red; }
+        .guideline { margin-top: 20px; background-color: #f0f8ff; padding: 15px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+    <h2>Slope Angle Checker for NCC & Clause 54 Compliance</h2>
+
+    <label for="verticalRise">Vertical Rise (m):</label>
+    <input type="number" id="verticalRise" step="0.01" placeholder="Enter vertical rise">
+
+    <label for="horizontalDistance">Horizontal Length (m):</label>
+    <input type="number" id="horizontalDistance" step="0.01" placeholder="Enter horizontal length">
+
+    <button onclick="checkSlope()">Check Slope</button>
+
+    <div class="result" id="result"></div>
+
+    <div class="guideline" id="guideline"></div>
+
+    <script>
+        function checkSlope() {
+            const verticalRise = parseFloat(document.getElementById('verticalRise').value);
+            const horizontalDistance = parseFloat(document.getElementById('horizontalDistance').value);
+
+            if (isNaN(verticalRise) || isNaN(horizontalDistance) || horizontalDistance === 0) {
+                alert('Please enter valid numbers!');
+                return;
+            }
+
+            const slopeAngle = Math.atan(verticalRise / horizontalDistance) * (180 / Math.PI);
+            const resultDiv = document.getElementById('result');
+            const guidelineDiv = document.getElementById('guideline');
+
+            resultDiv.innerHTML = `Calculated Slope Angle: ${slopeAngle.toFixed(2)}°`;
+
+            if (slopeAngle > 2.5) {
+                resultDiv.innerHTML += '<br><span class="pass">This slope meets Clause 54 & NCC standards for increased building height allowance.</span>';
+                guidelineDiv.innerHTML = `
+                    <strong>Clause 54 & NCC Guideline:</strong><br>
+                    For slopes greater than <strong>2.5° across an 8-meter section</strong>, the permissible building height increases from the standard <strong>9 meters to 10 meters</strong>. <br>
+                    (Reference: Clause 54, Victorian Planning Provisions & NCC Standards)
+                `;
+            } else {
+                resultDiv.innerHTML += '<br><span class="fail">This slope does NOT meet the standards for increased building height allowance.</span>';
+                guidelineDiv.innerHTML = `
+                    <strong>Clause 54 & NCC Guideline:</strong><br>
+                    Slopes below or equal to <strong>2.5° across an 8-meter section</strong> are limited to the standard maximum building height of <strong>9 meters</strong>. <br>
+                    (Reference: Clause 54, Victorian Planning Provisions & NCC Standards)
+                `;
+            }
+        }
+    </script>
+
+</body>
+</html>
